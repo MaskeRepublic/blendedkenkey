@@ -61,6 +61,22 @@
             z-index: 100;
         }
         
+        /* Mobile menu button */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--dark);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 1rem;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 101;
+        }
+        
         nav ul {
             display: flex;
             justify-content: center;
@@ -97,6 +113,50 @@
         
         nav ul li a:hover::after {
             width: 100%;
+        }
+        
+        /* Mobile navigation styles */
+        @media (max-width: 768px) {
+            .nav-container {
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            nav ul {
+                position: absolute;
+                background-color: white;
+                flex-direction: column;
+                width: 100%;
+                top: 100%;
+                left: 0;
+                padding: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+            
+            nav ul.show {
+                max-height: 500px;
+            }
+            
+            nav ul li {
+                margin: 0;
+                width: 100%;
+                text-align: center;
+            }
+            
+            nav ul li a {
+                display: block;
+                padding: 1rem;
+                border-bottom: 1px solid #eee;
+            }
         }
         
         .hero {
@@ -788,14 +848,19 @@
     
     <!-- Navigation -->
     <nav>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">Our Story</a></li>
-            <li><a href="#products">Menu</a></li>
-            <li><a href="#specials">Student Deals</a></li>
-            <li><a href="#testimonials">Vibes</a></li>
-            <li><a href="#contact">Hit Us Up</a></li>
-        </ul>
+        <div class="nav-container">
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul id="navMenu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">Our Story</a></li>
+                <li><a href="#products">Menu</a></li>
+                <li><a href="#specials">Student Deals</a></li>
+                <li><a href="#testimonials">Vibes</a></li>
+                <li><a href="#contact">Hit Us Up</a></li>
+            </ul>
+        </div>
     </nav>
     
     <!-- Hero Section -->
@@ -1103,5 +1168,34 @@
         <i class="fab fa-whatsapp"></i>
     </a>
     
+    <!-- JavaScript for mobile menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            menuToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('show');
+            });
+            
+            // Close menu when clicking on a link
+            const navLinks = document.querySelectorAll('#navMenu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    navMenu.classList.remove('show');
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const isClickInsideNav = navMenu.contains(event.target);
+                const isClickOnToggle = menuToggle.contains(event.target);
+                
+                if (!isClickInsideNav && !isClickOnToggle && navMenu.classList.contains('show')) {
+                    navMenu.classList.remove('show');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
